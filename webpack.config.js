@@ -4,7 +4,6 @@ const LessPluginAutoPrefix = require("less-plugin-autoprefix");
 const CompressionPlugin = require('compression-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || "development";
 const isProduction = () => NODE_ENV === "production";
-const baseDir = path.resolve(__dirname);
 console.log("isProduction=", isProduction());
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -34,9 +33,7 @@ const favicon = new FaviconsWebpackPlugin({
     }
 });
 const hotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin();
-const providePlugin = new webpack.ProvidePlugin({
-    // Promise: 'es6-promise' // Thanks Aaron (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
-});
+
 const definePlugin = new webpack.DefinePlugin({
     "process.env.NODE_ENV": JSON.stringify(NODE_ENV),
     "__DEVELOPMENT__": !isProduction()
@@ -89,7 +86,7 @@ let config = {
         rules: [
             {
                 test: /\.jsx?$/,
-                loader: "babel-loader?cacheDirectory=true"
+                loader: "babel-loader"
             },
             {
                 test: /\.(ico|eot|otf|webp|ttf|woff|woff2)$/i,
@@ -112,16 +109,6 @@ let config = {
                         }
                     }
                 ]
-            },
-            {
-                test: /\.json$/i,
-                use: {
-                    loader: "file-loader",
-                    options: {
-                        name: "assets/json/[name].[hash].[ext]",
-                        publicPath: isProduction() && process.env.ROOT_ROUTE ? `/${process.env.ROOT_ROUTE}/` : undefined
-                    }
-                }
             }, {
                 test: /\.css$/,
                 use: [{
@@ -141,10 +128,10 @@ let config = {
             }
         ]
     },
-    plugins: [htmlWebpackPlugin, providePlugin, definePlugin, favicon],
-    performance: {
-        hints: false
-    },
+    plugins: [htmlWebpackPlugin, definePlugin, favicon],
+    // performance: {
+    //     hints: false
+    // },
     watchOptions: {
         ignored: /node_modules/,
         aggregateTimeout: 1000,
@@ -176,7 +163,7 @@ if (isProduction()) {
     config.plugins.push(new CompressionPlugin());
 } else {
     config.plugins.push(hotModuleReplacementPlugin);
-    config.entry = ["react-hot-loader/patch"].concat(config.entry);
+    // config.entry = ["react-hot-loader/patch"].concat(config.entry);
 }
 
 module.exports = config;

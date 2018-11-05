@@ -1,21 +1,20 @@
-import React, {useState} from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import {render} from 'react-dom';
+import 'semantic-ui-css/semantic.min.css';
+import Entry from './entry'
 
-// import "./styles.css";
+console.log('!!')
+const reRender = () => {
+    render((
+        <Entry/>
+    ), document.getElementById('app-root'));
+};
+reRender();
 
-function App() {
-    const [count, updateCount] = useState(0);
-    console.log('render!')
-    return (
-        <div className="App">
-            <h1>Hello CodeSandbox</h1>
-            <h2>You clicked {count} times!</h2>
-
-            <button onClick={() => updateCount(5)}>Decrement</button>
-            <button onClick={() => updateCount(c => c + 1)}>Increment</button>
-        </div>
-    );
+if (__DEVELOPMENT__) {
+    if (module.hot) {
+        module.hot.accept('./entry', () => {
+            reRender();
+        });
+    }
 }
-
-const rootElement = document.getElementById("app-root");
-ReactDOM.render(<App/>, rootElement);
