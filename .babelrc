@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "es2015"
+    ],
+    "react"
+  ],
+  "plugins": [
+    //    "transform-regenerator",
+    //    "react-hot-loader/babel",
+    //    "transform-export-extensions",
+    "transform-react-handled-props",
+    "transform-function-bind",
+    "transform-class-properties"
+  ]
+}
